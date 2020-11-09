@@ -1,6 +1,48 @@
 package main
 
-import "fmt"
+import (
+	"fmt" 
+	"strings"
+)
+
+var (
+	hundred = Numeral{
+		romanNumeral: "C",
+		integerValue: 100,
+	}
+	ninety = Numeral{
+		romanNumeral: "XC",
+		integerValue: 90,
+	}
+	fifty = Numeral{
+		romanNumeral: "L",
+		integerValue: 50,
+	}
+	forty = Numeral{
+		romanNumeral: "XL",
+		integerValue: 40,
+	}
+	ten = Numeral{
+		romanNumeral: "X",
+		integerValue: 10,
+	}
+	nine = Numeral{
+		romanNumeral: "IX",
+		integerValue: 9,
+	}
+	five = Numeral{
+		romanNumeral: "V",
+		integerValue: 5,
+	}
+	four = Numeral{
+		romanNumeral: "IV",
+		integerValue: 4,
+	}
+	one = Numeral{
+		romanNumeral: "I",
+		integerValue: 1,
+	}
+)
 
 func main() {
 
@@ -30,41 +72,22 @@ func test(subject int, expectedResult string, testsFailed *int) {
 	}
 }
 
+type Numeral struct {
+	romanNumeral string
+	integerValue int
+	lowerNumeral string
+	lowerInteger int
+}
+
 func convert(number int) string {
 	convertedNumeral := ""
+	numerals := [9]Numeral{hundred, ninety, fifty, forty, ten, nine, five, four, one}
 
-	if number - 100 >= 0 {
-		convertedNumeral += "C"
-		number -= 100
-	} else if number - 90 >= 0 {
-		convertedNumeral += "XC"
-		number -= 90
-	} else if number - 50 >= 0 {
-		convertedNumeral += "L"
-		number -= 50
-	} else if number - 40 >= 0 {
-		convertedNumeral += "XL"
-		number -= 40
-	} else if number - 10 >= 0 {
-		convertedNumeral += "X"
-		number -= 10 
-	} else if number - 9 >= 0 {
-		convertedNumeral += "IX"
-		number -= 9
-	} else if number - 5 >= 0 {
-		convertedNumeral += "V"
-		number -= 5
-	} else if number - 4 >= 0 {
-		convertedNumeral += "IV"
-		number -= 4
-	} else if number - 1 >= 0 {
-		convertedNumeral += "I"
-		number -= 1
-	} 
-
-	if number > 0 {
-		convertedNumeral += convert(number)
-	} 
+	for _, numeral := range numerals {
+		quotient := number / numeral.integerValue 
+		number = number % numeral.integerValue
+		convertedNumeral += strings.Repeat(numeral.romanNumeral, quotient)
+	}
 
 	return convertedNumeral
 }
